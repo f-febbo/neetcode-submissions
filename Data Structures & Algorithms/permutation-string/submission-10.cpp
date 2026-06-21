@@ -1,0 +1,51 @@
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+        if(s1.length() > s2.length()){
+            return false;
+        }
+
+        vector<int> s1Count(26, 0);
+        vector<int> s2Count(26, 0);
+
+        for(auto i{0uz}; i < s1.length(); ++i){
+            s1Count[s1[i] - 'a']++;
+            s2Count[s2[i] - 'a']++;
+        }
+
+        int res = 0;
+        for(auto i{0uz}; i < 26; ++i){
+            if(s1Count[i] == s2Count[i]){
+                res++;
+            }
+        }
+
+        int l = 0;
+        for(auto r = s1.length(); r < s2.length(); ++r){
+            if(res == 26){
+                return true;
+            }
+
+            int index = s2[r] - 'a';
+            s2Count[index]++;
+
+            if(s1Count[index] == s2Count[index]){
+                res++;
+            } else if(s1Count[index] + 1 == s2Count[index]){
+                res--;
+            }
+
+            index = s2[l] - 'a';
+            s2Count[index]--;
+
+            if(s1Count[index] == s2Count[index]){
+                res++;
+            } else if(s1Count[index] - 1 == s2Count[index]){
+                res--;
+            }
+
+            l++;
+        }
+        return res == 26;
+    }
+};
